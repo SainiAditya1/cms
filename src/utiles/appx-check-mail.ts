@@ -18,7 +18,17 @@ export async function checkUserEmailForPurchase(
     itemtype: '10',
     itemid: courseId,
   });
-  //@ts-ignore
-  const response = await fetch(`${baseUrl}?${params}`, { headers });
-  return await response.json();
+
+  try {
+    const response = await fetch(`${baseUrl}?${params}`, { headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('There was a problem with the fetch operation: ', error);
+    throw error;
+  }
 }
